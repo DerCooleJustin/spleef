@@ -46,6 +46,12 @@ public class spleefListener implements Listener {
                             p.sendMessage(getPrefix(false) + "§6--------------------------------");
                             p.sendMessage(getPrefix(false) + "§6You are --------------" + getPlaceMsg(p) + ". Place!");
                             p.sendMessage(getPrefix(false) + "§6********************************");
+                        } else {
+                            p.sendMessage(getPrefix(false) + "§6************YOU WON!************");
+                            p.sendMessage(getPrefix(false) + getWinnerMsg(winner));
+                            p.sendMessage(getPrefix(false) + "§6--------------------------------");
+                            p.sendMessage(getPrefix(false) + "§6You are --------------" + getPlaceMsg(p) + ". Place!");
+                            p.sendMessage(getPrefix(false) + "§6********************************");
                         }
 
                     }
