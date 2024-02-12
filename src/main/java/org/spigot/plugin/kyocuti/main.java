@@ -13,7 +13,7 @@ public final class main extends JavaPlugin {
         if (Bukkit.getWorld(worldName) == null) {
             Bukkit.getLogger().severe(getPrefix(true) + "ERROR! The world has not been found. Please make sure the spleef world is called \"" + worldName + "\". If it isn't, rename the world and reboot the server.");
             Bukkit.getLogger().warning(getPrefix(true) + "This plugin is now shutting down.");
-            disablePlugin();
+            Bukkit.getPluginManager().disablePlugin(this);
             return;
         } else {
             Bukkit.getLogger().info(getPrefix(true) + "SUCCESS!.......................");
@@ -29,10 +29,6 @@ public final class main extends JavaPlugin {
     @Override
     public void onDisable() {
 
-    }
-
-    public static void disablePlugin(){
-        Bukkit.getPluginManager().disablePlugin(this);
     }
 
     public static String getPrefix(boolean consoleVersion){
