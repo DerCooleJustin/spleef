@@ -43,17 +43,14 @@ public class spleefListener implements Listener {
                     for (Player p : getPlayers(worldName)) {
                         if (p != winner){
                             p.sendMessage(getPrefix(false) + "§6***********GAME OVER!***********");
-                            p.sendMessage(getPrefix(false) + getWinnerMsg(winner));
-                            p.sendMessage(getPrefix(false) + "§6--------------------------------");
-                            p.sendMessage(getPrefix(false) + "§6You are --------------" + getPlaceMsg(p) + ". Place!");
-                            p.sendMessage(getPrefix(false) + "§6********************************");
+                            assert winner != null;
                         } else {
                             p.sendMessage(getPrefix(false) + "§6************YOU WON!************");
-                            p.sendMessage(getPrefix(false) + getWinnerMsg(winner));
-                            p.sendMessage(getPrefix(false) + "§6--------------------------------");
-                            p.sendMessage(getPrefix(false) + "§6You are --------------" + getPlaceMsg(p) + ". Place!");
-                            p.sendMessage(getPrefix(false) + "§6********************************");
                         }
+                        p.sendMessage(getPrefix(false) + getWinnerMsg(winner));
+                        p.sendMessage(getPrefix(false) + "§6--------------------------------");
+                        p.sendMessage(getPrefix(false) + "§6You are ------------- " + getPlaceMsg(p) + ". Place!");
+                        p.sendMessage(getPrefix(false) + "§6********************************");
 
                     }
                 } else {
