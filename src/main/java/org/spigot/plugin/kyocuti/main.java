@@ -26,11 +26,6 @@ public final class main extends JavaPlugin {
         Bukkit.getLogger().info(getPrefix(true));
     }
 
-    @Override
-    public void onDisable() {
-
-    }
-
     public static String getPrefix(boolean consoleVersion){
         if (consoleVersion) {
             return "[SPLEEF] ";
