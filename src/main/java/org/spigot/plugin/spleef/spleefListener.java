@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,7 +21,7 @@ public class spleefListener implements Listener {
     private final ArrayList<Player> outPlayers = new ArrayList<>();
     private Boolean isGameRunning = false;
     private UUID tplDontHandle = null;
-    private final ArrayList<UUID> playersWhoLeft = new ArrayList<>();
+    private final ArrayList<Player> playersWhoLeft = new ArrayList<>();
 
 
 
@@ -38,10 +39,15 @@ public class spleefListener implements Listener {
                 Objects.requireNonNull(Bukkit.getPlayer(event.getEntity().getUniqueId())).setGameMode(GameMode.SPECTATOR);
                 outPlayers.add((Player) event.getEntity());
                 if (playerList.size()-outPlayers.size() == 1){
+                    this.isGameRunning = false;
                     Player winner = null;
-                    for (Player p : outPlayers) if (!outPlayers.contains(p) )winner = p;
-                    for (Player p : getPlayers()) {
-                        if (!(playersWhoLeft.contains(p.getUniqueId()))) {
+                    for (Player p : outPlayers) if (!outPlayers.contains(p)) winner = p;
+                    ArrayList<Player> players = new ArrayList<>();
+                    for (UUID pUuid : this.playerList.keySet()) {
+                        players.add(Bukkit.getPlayer(pUuid));
+                    }
+                    for (Player p : players) {
+                        if (!(playersWhoLeft.contains(p))) {
                             if (p != winner) {
                                 p.sendMessage(getPrefix(false) + "§6***********GAME OVER!***********");
                                 assert winner != null;
@@ -52,6 +58,13 @@ public class spleefListener implements Listener {
                             p.sendMessage(getPrefix(false) + "§6--------------------------------");
                             p.sendMessage(getPrefix(false) + "§6You are ------------- " + getPlaceMsg(p) + ". Place!");
                             p.sendMessage(getPrefix(false) + "§6********************************");
+                            this.tplDontHandle = p.getUniqueId();
+                            p.teleport(playerList.get(p.getUniqueId()), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                            playerList.remove(p.getUniqueId());
+                            if (p != winner) outPlayers.remove(p);
+                        } else {
+                            outPlayers.remove(p);
+                            playersWhoLeft.remove(p);
                         }
                     }
                 } else {
@@ -276,7 +289,7 @@ public class spleefListener implements Listener {
                             }
                         }
                         outPlayers.add(event.getPlayer());
-                        playersWhoLeft.add(event.getPlayer().getUniqueId());
+                        playersWhoLeft.add(event.getPlayer());
                     } else {
                         for (Player p : getPlayers()) {
                             if (p != event.getPlayer()) p.sendMessage(getPrefix(false) + "§8[§4-§8]§r " + event.getPlayer().getDisplayName());
@@ -288,6 +301,24 @@ public class spleefListener implements Listener {
         } else {
             //Der Teleport Handler soll den teleportierten Spieler nicht handlen.
             tplDontHandle = null;
+        }
+    }
+
+    @EventHandler
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        if (Objects.requireNonNull(event.getPlayer().getLocation().getWorld()).getName().equals(worldName)) {
+            if (this.isGameRunning) {
+                if (this.playerList.containsKey(event.getPlayer().getUniqueId())) {
+                    this.playersWhoLeft.add(event.getPlayer());
+                    this.outPlayers.add(event.getPlayer());
+                    for (Player p : getPlayers()) {
+                        if (p != event.getPlayer()) {
+                            p.sendMessage(getPrefix(false) + "§8[§4-§8]§r " + event.getPlayer().getDisplayName());
+                            p.sendMessage(main.getPrefix(false) + "There are " + (playerList.size()-outPlayers.size()) + " players remaining!");
+                        }
+                    }
+                }
+            }
         }
     }
 }
