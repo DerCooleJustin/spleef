@@ -72,16 +72,16 @@ public class spleefListener implements Listener {
     @NotNull
     private List<Player> getPlayers(String worldName) throws NullPointerException{
         if (Bukkit.getWorld(worldName) == null || Objects.requireNonNull(Bukkit.getWorld(worldName)).getPlayers().isEmpty()) {
-            String msg;
+            String playerMsg;
             String msgConsole;
             if (Bukkit.getWorld(worldName) == null) {
-                msg = getPrefix(false) + "§4§lERROR! §4The world \"" + worldName + "\" cant be found anymore. Was it deleted after startup?";
+                playerMsg = getPrefix(false) + "§4§lERROR! §4The world \"" + worldName + "\" cant be found anymore. Was it deleted after startup?";
                 msgConsole = getPrefix(true) + "ERROR! The world \"" + worldName + "\" cant be found anymore. Was it deleted after startup?";
             } else {
-                msg = getPrefix(false) + "§4§lERROR! §4The world \"" + worldName + "\" seems to be empty, but at least 1 player is in it. Is the server lagging behind?";
+                playerMsg = getPrefix(false) + "§4§lERROR! §4The world \"" + worldName + "\" seems to be empty, but at least 1 player is in it. Is the server lagging behind?";
                 msgConsole = getPrefix(true) + "ERROR! The world \"" + worldName + "\" seems to be empty, but at least 1 player is in it. Is the server lagging behind?";
             }
-            for (Player p : Bukkit.getOnlinePlayers()) if (p.hasPermission("spleef.admin")) p.sendMessage("§4§l" + msg + "\nPlease look into the servers console/logs for more information.");
+            for (Player p : Bukkit.getOnlinePlayers()) if (p.hasPermission("spleef.admin")) p.sendMessage(playerMsg + "\nPlease look into the servers console/logs for more information.");
             throw new IllegalStateException(msgConsole);
         } else {
             return Objects.requireNonNull(Bukkit.getWorld(worldName)).getPlayers();
