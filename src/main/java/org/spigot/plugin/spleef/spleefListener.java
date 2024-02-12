@@ -18,9 +18,9 @@ import static org.spigot.plugin.spleef.main.worldName;
 public class spleefListener implements Listener {
     private final Map<UUID, Location> playerList = new HashMap<>();
     private final ArrayList<Player> outPlayers = new ArrayList<>();
-    private final ArrayList<Player> playersWhoLeft = new ArrayList<>();
     private Boolean isGameRunning = false;
     private UUID tplDontHandle = null;
+    private final ArrayList<UUID> playersWhoLeft = new ArrayList<>();
 
 
 
@@ -41,17 +41,18 @@ public class spleefListener implements Listener {
                     Player winner = null;
                     for (Player p : outPlayers) if (!outPlayers.contains(p) )winner = p;
                     for (Player p : getPlayers()) {
-                        if (p != winner){
-                            p.sendMessage(getPrefix(false) + "§6***********GAME OVER!***********");
-                            assert winner != null;
-                        } else {
-                            p.sendMessage(getPrefix(false) + "§6************YOU WON!************");
+                        if (!(playersWhoLeft.contains(p.getUniqueId()))) {
+                            if (p != winner) {
+                                p.sendMessage(getPrefix(false) + "§6***********GAME OVER!***********");
+                                assert winner != null;
+                            } else {
+                                p.sendMessage(getPrefix(false) + "§6************YOU WON!************");
+                            }
+                            p.sendMessage(getPrefix(false) + getWinnerMsg(winner));
+                            p.sendMessage(getPrefix(false) + "§6--------------------------------");
+                            p.sendMessage(getPrefix(false) + "§6You are ------------- " + getPlaceMsg(p) + ". Place!");
+                            p.sendMessage(getPrefix(false) + "§6********************************");
                         }
-                        p.sendMessage(getPrefix(false) + getWinnerMsg(winner));
-                        p.sendMessage(getPrefix(false) + "§6--------------------------------");
-                        p.sendMessage(getPrefix(false) + "§6You are ------------- " + getPlaceMsg(p) + ". Place!");
-                        p.sendMessage(getPrefix(false) + "§6********************************");
-
                     }
                 } else {
                     for (Player p : getPlayers()) {
@@ -275,7 +276,7 @@ public class spleefListener implements Listener {
                             }
                         }
                         outPlayers.add(event.getPlayer());
-                        playersWhoLeft.add(event.getPlayer());
+                        playersWhoLeft.add(event.getPlayer().getUniqueId());
                     } else {
                         for (Player p : getPlayers()) {
                             if (p != event.getPlayer()) p.sendMessage(getPrefix(false) + "§8[§4-§8]§r " + event.getPlayer().getDisplayName());
