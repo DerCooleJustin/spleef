@@ -20,12 +20,10 @@ public class spleefListener implements Listener {
     private final ArrayList<Player> outPlayers = new ArrayList<>();
     private Boolean isGameRunning = false;
     private UUID tplDontHandle = null;
-    private final main plugin;
 
 
     public spleefListener(main plugin) {
         Bukkit.getPluginManager().registerEvents(this, plugin);
-        this.plugin = plugin;
     }
 
     @EventHandler
@@ -104,8 +102,8 @@ public class spleefListener implements Listener {
         if (outPlayers.contains(player)){
             int number = outPlayers.indexOf(player);
             String string;
-            if (number < 10 && number >= 0) {
-                string = "0" + String.valueOf(outPlayers.indexOf(player));
+            if (number >= 0 && number < 10) {
+                string = "0" + outPlayers.indexOf(player);
             } else {
                 string = String.valueOf(outPlayers.indexOf(player));
             }
@@ -121,14 +119,14 @@ public class spleefListener implements Listener {
             if (event.getTo().getWorld().getName().equals(worldName)){
                 if (isGameRunning) {
                     event.setCancelled(true);
-                    event.getPlayer().sendMessage(getPrefix(false) + "?c?lThe Spleef game is already in progress!");
-                    event.getPlayer().sendMessage(getPrefix(false) + "?Please try again later.");
+                    event.getPlayer().sendMessage(getPrefix(false) + "§c§lThe Spleef game is already in progress!");
+                    event.getPlayer().sendMessage(getPrefix(false) + "§cPlease try again later.");
                 } else {
                     int maxPlayers = 10;
                     if (getPlayers(worldName).size() < maxPlayers) {
                         playerList.put(event.getPlayer().getUniqueId(), event.getFrom());
                         for (Player p : getPlayers(worldName)) {
-                            if (p.getUniqueId() != event.getPlayer().getUniqueId()) p.sendMessage(getPrefix(false) + "?8[?2+?8]?r " + event.getPlayer().getDisplayName());
+                            if (p.getUniqueId() != event.getPlayer().getUniqueId()) p.sendMessage(getPrefix(false) + "§8[§2+§8]§r " + event.getPlayer().getDisplayName());
                         }
                         if (getPlayers(worldName).size() == maxPlayers) {
                             for (Player p : getPlayers(worldName))p.sendTitle("30", "The game starts in:", -1, -1, -1);
@@ -216,6 +214,8 @@ public class spleefListener implements Listener {
                                             } else {
                                                 for (Player p : getPlayers(worldName)) p.sendMessage(getPrefix(false) + "The game has been cancelled: Not enough players.");
                                             }
+                                        } else {
+                                            for (Player p : getPlayers(worldName)) p.sendMessage(getPrefix(false) + "The game has been cancelled: Not enough players.");
                                         }
                                     } else {
                                         for (Player p : getPlayers(worldName)) p.sendMessage(getPrefix(false) + "The game has been cancelled: Not enough players.");
@@ -235,8 +235,8 @@ public class spleefListener implements Listener {
                             }
                             if (allePrio) {
                                 event.setCancelled(true);
-                                event.getPlayer().sendMessage(getPrefix(false) + "?c?lSpleef is full!");
-                                event.getPlayer().sendMessage(getPrefix(false) + "?cTry again later.");
+                                event.getPlayer().sendMessage(getPrefix(false) + "§c§lSpleef is full!");
+                                event.getPlayer().sendMessage(getPrefix(false) + "§cTry again later.");
                             } else {
                                 int randomNum = (int) Math.floor(Math.random() * getPlayers(worldName).size());
                                 Player kickedPlayer = getPlayers(worldName).get(randomNum);
@@ -248,16 +248,16 @@ public class spleefListener implements Listener {
                                 Location kickedLoc = playerList.get(kickedUuid);
                                 playerList.remove(kickedUuid, kickedLoc);
                                 kickedPlayer.teleport(kickedLoc);
-                                kickedPlayer.sendMessage(getPrefix(false) + "?4You have been kicked from spleef: ?cA priority player joined the full game");
+                                kickedPlayer.sendMessage(getPrefix(false) + "§4You have been kicked from spleef: §cA priority player joined the full game");
                                 for (Player p : getPlayers(worldName)) {
-                                    if (p.getUniqueId() != kickedUuid) p.sendMessage(getPrefix(false) + "?8[?4-?8]?r " + kickedPlayer.getDisplayName());
-                                    if (p.getUniqueId() != event.getPlayer().getUniqueId()) p.sendMessage(getPrefix(false) + "?8[?2+?8]?r " + event.getPlayer().getDisplayName());
+                                    if (p.getUniqueId() != kickedUuid) p.sendMessage(getPrefix(false) + "§8[§4-§8]§r " + kickedPlayer.getDisplayName());
+                                    if (p.getUniqueId() != event.getPlayer().getUniqueId()) p.sendMessage(getPrefix(false) + "§8[§2+§8]§r " + event.getPlayer().getDisplayName());
                                 }
                             }
                         } else {
                             event.setCancelled(true);
-                            event.getPlayer().sendMessage(getPrefix(false) + "?c?lSpleef is full!");
-                            event.getPlayer().sendMessage(getPrefix(false) + "?cTry again later.");
+                            event.getPlayer().sendMessage(getPrefix(false) + "§c§lSpleef is full!");
+                            event.getPlayer().sendMessage(getPrefix(false) + "§cTry again later.");
                         }
                     }
                 }
@@ -267,7 +267,7 @@ public class spleefListener implements Listener {
                     Location location = playerList.get(uuid);
                     playerList.remove(uuid, location);
                     for (Player p : getPlayers(worldName)) {
-                        if (p.getUniqueId() != uuid) p.sendMessage(getPrefix(false) + "?8[?4-?8]?r " + event.getPlayer().getDisplayName());
+                        if (p.getUniqueId() != uuid) p.sendMessage(getPrefix(false) + "§8[§4-§8]§r " + event.getPlayer().getDisplayName());
                     }
                 }
             }
