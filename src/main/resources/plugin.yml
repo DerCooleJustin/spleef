@@ -1,0 +1,28 @@
+name: Spleef
+version: '1'
+main: org.spigot.plugin.kyocuti.main
+api-version: '1.20'
+authors: [DerCooleJustin, KYOCUTI]
+depend: [Multiverse-Core]
+load: POSTWORLD
+permissions:
+  spleef.join:
+    description: Allows you to join the minigame spleef.
+    default: true
+  spleef.priority:
+    description: Allows you to kick another player if spleef is full.
+    default: op
+  spleef.admin:
+    description: Gives you the join and priority permission, + you will get notifications when an error occures.
+    default: op
+    children:
+      - spleef.join
+      - spleef.priority
+
+
+commands:
+  spleef:
+    description: Teleports you to the spleef minigame.
+    permission: spleef.join
+    permission-message: §cYou do not have permission to join spleef.§r
+    usage: "/spleef"
