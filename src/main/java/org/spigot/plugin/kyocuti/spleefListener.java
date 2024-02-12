@@ -12,8 +12,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-//comment for commit
-
 import static org.spigot.plugin.kyocuti.main.getPrefix;
 import static org.spigot.plugin.kyocuti.main.worldName;
 
