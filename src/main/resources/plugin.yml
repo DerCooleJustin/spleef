@@ -2,7 +2,7 @@ name: Spleef
 version: '1'
 main: org.spigot.plugin.spleef.main
 api-version: '1.20'
-authors: [DerCooleJustin, KYOCUTI]
+author: DerCooleJustin
 depend: [Multiverse-Core]
 load: POSTWORLD
 permissions:
