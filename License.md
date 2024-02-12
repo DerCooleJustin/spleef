@@ -1,4 +1,8 @@
 # Spleef License
+## Agreeing
+By installing this plugin, you automatically to the following license.
+
+## License
 
 The following license governs the use, modification, and distribution of the plugin "Spleef".
 
