@@ -18,8 +18,10 @@ import static org.spigot.plugin.spleef.main.worldName;
 public class spleefListener implements Listener {
     private final Map<UUID, Location> playerList = new HashMap<>();
     private final ArrayList<Player> outPlayers = new ArrayList<>();
+    private final ArrayList<Player> playersWhoLeft = new ArrayList<>();
     private Boolean isGameRunning = false;
     private UUID tplDontHandle = null;
+
 
 
     public spleefListener(main plugin) {
@@ -37,8 +39,7 @@ public class spleefListener implements Listener {
                 outPlayers.add((Player) event.getEntity());
                 if (playerList.size()-outPlayers.size() == 1){
                     Player winner = null;
-                    for (Player p : outPlayers) if (!playerList.containsKey(p.getUniqueId())) winner = p;
-                    assert winner != null;
+                    for (Player p : outPlayers) if (!outPlayers.contains(p) )winner = p;
                     for (Player p : getPlayers(worldName)) {
                         if (p != winner){
                             p.sendMessage(getPrefix(false) + "§6***********GAME OVER!***********");
@@ -62,7 +63,6 @@ public class spleefListener implements Listener {
                     }
                 }
             } else {
-                ((Player) event.getEntity()).sendTitle("You are out!", "Better luck next time.", -1, -1, -1);
                 tplDontHandle = event.getEntity().getUniqueId();
                 event.getEntity().teleport(main.spleefSpawn, PlayerTeleportEvent.TeleportCause.PLUGIN);
             }
@@ -159,6 +159,7 @@ public class spleefListener implements Listener {
                                                         for (Player p : getPlayers(worldName))p.sendTitle("1", "The game starts in:", -1, -1, -1);
                                                         wait(1000);
                                                         if (getPlayers(worldName).size() == maxPlayers){
+                                                            this.isGameRunning = true;
                                                             main.SpleefStarts starts = new main.SpleefStarts();
                                                             int i = 1;
                                                             for (Player p : getPlayers(worldName)) {
@@ -269,12 +270,30 @@ public class spleefListener implements Listener {
                 }
             } else {
                 if (playerList.containsKey(event.getPlayer().getUniqueId())) {
-                    UUID uuid = event.getPlayer().getUniqueId();
-                    Location location = playerList.get(uuid);
-                    playerList.remove(uuid, location);
-                    for (Player p : getPlayers(worldName)) {
-                        if (p.getUniqueId() != uuid) p.sendMessage(getPrefix(false) + "§8[§4-§8]§r " + event.getPlayer().getDisplayName());
+                    if (this.isGameRunning) {
+                        for (Player p : getPlayers(worldName)) {
+                            if (p != event.getPlayer()) {
+                                p.sendMessage(getPrefix(false) + "§8[§4-§8]§r " + event.getPlayer().getDisplayName());
+                                p.sendMessage(main.getPrefix(false) + "There are " + (playerList.size()-outPlayers.size()) + " players remaining!");
+                            }
+                        }
+                        outPlayers.add(event.getPlayer());
+                        playersWhoLeft.add(event.getPlayer());
+                    } else {
+                        for (Player p : getPlayers(worldName)) {
+                            if (p != event.getPlayer()) p.sendMessage(getPrefix(false) + "§8[§4-§8]§r " + event.getPlayer().getDisplayName());
+                        }
+                        playerList.remove(event.getPlayer().getUniqueId(), playerList.get(event.getPlayer().getUniqueId()));
                     }
+
+                    /*
+                        UUID uuid = event.getPlayer().getUniqueId();
+                        Location location = playerList.get(uuid);
+                        playerList.remove(uuid, location);
+                        for (Player p : getPlayers(worldName)) {
+                            if (p.getUniqueId() != uuid) ;
+                        }
+                    */
                 }
             }
         } else {
