@@ -4,6 +4,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.Objects;
+
 public final class main extends JavaPlugin {
     @Override
     public void onEnable() {
@@ -21,7 +23,7 @@ public final class main extends JavaPlugin {
         Bukkit.getLogger().info(getPrefix(true) + "Adding Listener................");
         new spleefListener(this);
         Bukkit.getLogger().info(getPrefix(true) + "Registering command............");
-        getCommand("spleef").setExecutor(new spleefCommand());
+        Objects.requireNonNull(getCommand("spleef")).setExecutor(new spleefCommand());
         Bukkit.getLogger().info(getPrefix(true) + "*************DONE!*************");
         Bukkit.getLogger().info(getPrefix(true));
     }
@@ -33,8 +35,8 @@ public final class main extends JavaPlugin {
             return "§8§l[§3§lSPL§2§lEEF§8§l]§r ";
         }
     }
-    public static String worldName = "spleef"; /*TODO: Weltname eintragen*/
-    public static Location spleefSpawn = new Location( //TODO: Fix coords and rotation
+    public static final String worldName = "spleef"; /*TODO: Weltname eintragen*/
+    public static final Location spleefSpawn = new Location( //TODO: Fix coords and rotation
             Bukkit.getWorld(worldName),
             0,
             0,
@@ -43,7 +45,7 @@ public final class main extends JavaPlugin {
             0
     );
 
-    public static Location viewerPlatform = new Location( //TODO: Fix coords and rotation
+    public static final Location viewerPlatform = new Location( //TODO: Fix coords and rotation
             Bukkit.getWorld(worldName),
             0,
             0,
@@ -52,7 +54,7 @@ public final class main extends JavaPlugin {
             0
     );
     public static class SpleefStarts /*TODO: Fix coords and rotation*/ {
-        Location ONE = new Location(
+        final Location ONE = new Location(
                 Bukkit.getWorld(worldName),
                 0,
                 0,
@@ -60,7 +62,7 @@ public final class main extends JavaPlugin {
                 0,
                 0
         );
-        Location TWO = new Location(
+        final Location TWO = new Location(
                 Bukkit.getWorld(worldName),
                 0,
                 0,
@@ -68,7 +70,7 @@ public final class main extends JavaPlugin {
                 0,
                 0
         );
-        Location THREE = new Location(
+        final Location THREE = new Location(
                 Bukkit.getWorld(worldName),
                 0,
                 0,
@@ -76,7 +78,7 @@ public final class main extends JavaPlugin {
                 0,
                 0
         );
-        Location FOUR = new Location(
+        final Location FOUR = new Location(
                 Bukkit.getWorld(worldName),
                 0,
                 0,
@@ -84,7 +86,7 @@ public final class main extends JavaPlugin {
                 0,
                 0
         );
-        Location FIVE = new Location(
+        final Location FIVE = new Location(
                 Bukkit.getWorld(worldName),
                 0,
                 0,
@@ -92,7 +94,7 @@ public final class main extends JavaPlugin {
                 0,
                 0
         );
-        Location SIX = new Location(
+        final Location SIX = new Location(
                 Bukkit.getWorld(worldName),
                 0,
                 0,
@@ -100,7 +102,7 @@ public final class main extends JavaPlugin {
                 0,
                 0
         );
-        Location SEVEN = new Location(
+        final Location SEVEN = new Location(
                 Bukkit.getWorld(worldName),
                 0,
                 0,
@@ -108,7 +110,7 @@ public final class main extends JavaPlugin {
                 0,
                 0
         );
-        Location EIGHT = new Location(
+        final Location EIGHT = new Location(
                 Bukkit.getWorld(worldName),
                 0,
                 0,
@@ -116,7 +118,7 @@ public final class main extends JavaPlugin {
                 0,
                 0
         );
-        Location NINE = new Location(
+        final Location NINE = new Location(
                 Bukkit.getWorld(worldName),
                 0,
                 0,
@@ -124,7 +126,7 @@ public final class main extends JavaPlugin {
                 0,
                 0
         );
-        Location TEN = new Location(
+        final Location TEN = new Location(
                 Bukkit.getWorld(worldName),
                 0,
                 0,
