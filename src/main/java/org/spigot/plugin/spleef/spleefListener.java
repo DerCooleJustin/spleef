@@ -90,7 +90,7 @@ public class spleefListener implements Listener {
 
     @NotNull
     private static String getWinnerMsg(Player winner) {
-        StringBuilder gameOverMsgStringBuilder = new StringBuilder("§6WINNER: ------------------------" + winner.getDisplayName());
+        StringBuilder gameOverMsgStringBuilder = new StringBuilder("§6WINNER: ----------------------- " + winner.getDisplayName());
         if (gameOverMsgStringBuilder.length() > 34) {
             while (!(gameOverMsgStringBuilder.length() == 34)) {
                 gameOverMsgStringBuilder.deleteCharAt(11);
