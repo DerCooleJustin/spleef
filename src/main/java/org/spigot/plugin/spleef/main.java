@@ -1,4 +1,4 @@
-package org.spigot.plugin.kyocuti;
+package org.spigot.plugin.spleef;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

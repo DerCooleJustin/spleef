@@ -1,4 +1,4 @@
-package org.spigot.plugin.kyocuti;
+package org.spigot.plugin.spleef;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -12,8 +12,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-import static org.spigot.plugin.kyocuti.main.getPrefix;
-import static org.spigot.plugin.kyocuti.main.worldName;
+import static org.spigot.plugin.spleef.main.getPrefix;
+import static org.spigot.plugin.spleef.main.worldName;
 
 public class spleefListener implements Listener {
     private final Map<UUID, Location> playerList = new HashMap<>();

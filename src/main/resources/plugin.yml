@@ -1,6 +1,6 @@
 name: Spleef
 version: '1'
-main: org.spigot.plugin.kyocuti.main
+main: org.spigot.plugin.spleef.main
 api-version: '1.20'
 authors: [DerCooleJustin, KYOCUTI]
 depend: [Multiverse-Core]
