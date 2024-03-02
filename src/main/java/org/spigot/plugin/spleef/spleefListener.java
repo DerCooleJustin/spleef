@@ -25,6 +25,7 @@ public class spleefListener implements Listener {
     private final int maxPlayers = 10;
     private final int minPlayers = 5;
     private final main.locations spawns = new main.locations();
+    private final ArrayList<UUID> invincibles = new ArrayList<>();
 
     public spleefListener(main plugin) {
         Bukkit.getPluginManager().registerEvents(this, plugin);
@@ -78,7 +79,11 @@ public class spleefListener implements Listener {
             } else {
                 tplDontHandle.add(event.getEntity().getUniqueId());
                 event.getEntity().teleport(spawns.spleefSpawn, PlayerTeleportEvent.TeleportCause.PLUGIN);
+                invincibles.add(event.getEntity().getUniqueId());
+                Bukkit.getScheduler().runTaskLater(this.plugin, () -> this.invincibles.remove(event.getEntity().getUniqueId()), 20L);
             }
+        } else if(invincibles.contains(event.getEntity().getUniqueId())) {
+            event.setCancelled(true);
         }
     }
 
