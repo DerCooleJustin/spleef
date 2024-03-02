@@ -13,8 +13,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-import static org.spigot.plugin.spleef.main.getPrefix;
-import static org.spigot.plugin.spleef.main.worldName;
+import static org.spigot.plugin.spleef.main.*;
 
 public class spleefListener implements Listener {
     private final Map<UUID, Location> playerList = new HashMap<>();
@@ -34,7 +33,7 @@ public class spleefListener implements Listener {
 
     @EventHandler
     public void onPlayerDamage(EntityDamageEvent event) {
-        if (event.getEntity().getType().toString().equals("PLAYER") && event.getCause().toString().equals("VOID") && event.getEntity().getWorld().getName().equals(worldName)) {
+        if (event.getEntity().getType().toString().equals("PLAYER") && event.getCause().toString().equals("VOID") && event.getEntity().getWorld().getName().equals(worldNameMatchmaking)) {
             event.setCancelled(true);
             if (isGameRunning) {
                 tplDontHandle.add(event.getEntity().getUniqueId());
