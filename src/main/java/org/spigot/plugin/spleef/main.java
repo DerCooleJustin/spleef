@@ -36,24 +36,25 @@ public final class main extends JavaPlugin {
         }
     }
     public static final String worldName = "spleef"; /*TODO: Weltname eintragen*/
-    public static final Location spleefSpawn = new Location( //TODO: Fix coords and rotation
-            Bukkit.getWorld(worldName),
-            0,
-            0,
-            0,
-            0,
-            0
-    );
 
-    public static final Location viewerPlatform = new Location( //TODO: Fix coords and rotation
-            Bukkit.getWorld(worldName),
-            0,
-            0,
-            0,
-            0,
-            0
-    );
-    public static class SpleefStarts /*TODO: Fix coords and rotation*/ {
+    public static class locations /*TODO: Fix coords and rotation*/ {
+        final Location spleefSpawn = new Location( //TODO: Fix coords and rotation
+                Bukkit.getWorld(worldName),
+                0,
+                0,
+                0,
+                0,
+                0
+        );
+        final Location viewerPlatform = new Location( //TODO: Fix coords and rotation
+                Bukkit.getWorld(worldName),
+                0,
+                0,
+                0,
+                0,
+                0
+        );
+
         final Location ONE = new Location(
                 Bukkit.getWorld(worldName),
                 0,

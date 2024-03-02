@@ -1,18 +1,3 @@
-/*
- * Copyright (c) 2024.
- * IF this plugin was free:
- * 1. You do have permission to publish it free of charge.
- * 1.1 IF you do, you have to mention me atleast once in your post.
- * 2. You do have permission to publish it with charge, IF you performed at least 3 major changes to the plugin.
- * 2.1 This does not mean you can charge other individuals for changing 3 Strings and/or messages.
- * 2.2 This DOES mean that you have to change AT LEAST one way the plugin handles teleportation.
- * 2.3 IF you publish your version of the plugin with charge, you HAVE to link the original at LEAST once where users can see it.
- * 2.4 IF you modify this plugin to behave malicious, I WILL perform legal steps against you.
- * 2.4.1 This ALSO applies to any other behavior that the description of the modified version does not comply with, AS WELL as intentionally coded bugs and/or errors that might break the server, the world, the players and/or performs any other type of damage to the server and/or users/moderators/admins/... .
- * 3. You have permission to crack, reverse engineer and any other type of looking into the code and the plugin's performance/behavior.
- * 4. If you find any security risk and/or other privace errors, you do have permission to modify the original plugin and send me your version, along with explanation and steps the reproduce the issue. I will look over it and try to release a patch. This patch might be, include or include parts of your version.
- */
-
 package org.spigot.plugin.spleef;
 
 import org.bukkit.Bukkit;
@@ -35,10 +20,12 @@ public class spleefListener implements Listener {
     private final Map<UUID, Location> playerList = new HashMap<>();
     private final ArrayList<Player> outPlayers = new ArrayList<>();
     private Boolean isGameRunning = false;
-    private UUID tplDontHandle = null;
+    private final ArrayList<UUID> tplDontHandle = new ArrayList<>();
     private final ArrayList<Player> playersWhoLeft = new ArrayList<>();
     private final main plugin;
     private final int maxPlayers = 10;
+    private final int minPlayers = 5;
+    private final main.locations spawns = new main.locations();
 
     public spleefListener(main plugin) {
         Bukkit.getPluginManager().registerEvents(this, plugin);
@@ -50,8 +37,8 @@ public class spleefListener implements Listener {
         if (event.getEntity().getType().toString().equals("PLAYER") && event.getCause().toString().equals("VOID") && event.getEntity().getWorld().getName().equals(worldName)) {
             event.setCancelled(true);
             if (isGameRunning) {
-                tplDontHandle = event.getEntity().getUniqueId();
-                event.getEntity().teleport(main.viewerPlatform, PlayerTeleportEvent.TeleportCause.PLUGIN);
+                tplDontHandle.add(event.getEntity().getUniqueId());
+                event.getEntity().teleport(spawns.viewerPlatform, PlayerTeleportEvent.TeleportCause.PLUGIN);
                 Objects.requireNonNull(Bukkit.getPlayer(event.getEntity().getUniqueId())).setGameMode(GameMode.SPECTATOR);
                 outPlayers.add((Player) event.getEntity());
                 if (playerList.size()-outPlayers.size() == 1){
@@ -74,7 +61,7 @@ public class spleefListener implements Listener {
                             p.sendMessage(getPrefix(false) + "§6--------------------------------");
                             p.sendMessage(getPrefix(false) + "§6You are ------------- " + getPlaceMsg(p) + ". Place!");
                             p.sendMessage(getPrefix(false) + "§6********************************");
-                            this.tplDontHandle = p.getUniqueId();
+                            this.tplDontHandle.add(p.getUniqueId());
                             p.teleport(playerList.get(p.getUniqueId()), PlayerTeleportEvent.TeleportCause.PLUGIN);
                             playerList.remove(p.getUniqueId());
                             if (p != winner) outPlayers.remove(p);
@@ -90,8 +77,8 @@ public class spleefListener implements Listener {
                     }
                 }
             } else {
-                tplDontHandle = event.getEntity().getUniqueId();
-                event.getEntity().teleport(main.spleefSpawn, PlayerTeleportEvent.TeleportCause.PLUGIN);
+                tplDontHandle.add(event.getEntity().getUniqueId());
+                event.getEntity().teleport(spawns.spleefSpawn, PlayerTeleportEvent.TeleportCause.PLUGIN);
             }
         }
     }
@@ -145,26 +132,25 @@ public class spleefListener implements Listener {
             return "00";
         }
     }
-    private main.SpleefStarts = new main.SpleefStarts() //TODO
 
     @EventHandler
     public void onPlayerTeleport(PlayerTeleportEvent event) {
-        if(event.getPlayer().getUniqueId() != tplDontHandle) {
+        if(!tplDontHandle.contains(event.getPlayer().getUniqueId())) {
             if (Objects.requireNonNull(Objects.requireNonNull(event.getTo()).getWorld()).getName().equals(worldName)){
                 if (isGameRunning) {
                     event.setCancelled(true);
                     event.getPlayer().sendMessage(getPrefix(false) + "§c§lThe Spleef game is already in progress!");
                     event.getPlayer().sendMessage(getPrefix(false) + "§cPlease try again later.");
                 } else {
-                    if (getPlayers().size() < maxPlayers) {
+                    if (getPlayers().size() <= maxPlayers && getPlayers().size() >= minPlayers) {
                         playerList.put(event.getPlayer().getUniqueId(), event.getFrom());
                         for (Player p : getPlayers()) {
                             if (p.getUniqueId() != event.getPlayer().getUniqueId()) p.sendMessage(getPrefix(false) + "§8[§2+§8]§r " + event.getPlayer().getDisplayName());
                         }
-                        if (getPlayers().size() == maxPlayers) {
+                        if (getPlayers().size() <= maxPlayers && getPlayers().size() >= minPlayers) {
                             final int[] countdown = {30};
                             Bukkit.getScheduler().runTaskTimer(this.plugin, () -> {
-                                if (getPlayers().size() == this.maxPlayers) {
+                                if (getPlayers().size() <= this.maxPlayers && getPlayers().size() >= this.minPlayers) {
                                     if (countdown[0] > 0) {
                                         for (Player p : getPlayers()) p.sendTitle(String.valueOf(countdown[0]), "The game starts in:", -1, -1, -1);
                                         countdown[0] -= 1;
@@ -172,16 +158,45 @@ public class spleefListener implements Listener {
                                         int i = 1;
                                         for (Player p : getPlayers()) {
                                             p.sendTitle("GO!", "Good luck!", -1, -1, -1);
-                                            tplDontHandle = p.getUniqueId();
+                                            tplDontHandle.add(p.getUniqueId());
                                             switch (i) {
                                                 case 1: {
-                                                    p.teleport(main.SpleefStarts.) //TODO
+                                                    p.teleport(spawns.ONE);
+                                                    break;
+                                                } case 2: {
+                                                    p.teleport(spawns.TWO);
+                                                    break;
+                                                } case 3: {
+                                                    p.teleport(spawns.THREE);
+                                                    break;
+                                                } case 4:{
+                                                    p.teleport(spawns.FOUR);
+                                                    break;
+                                                } case 5: {
+                                                    p.teleport(spawns.FIVE);
+                                                    break;
+                                                } case 6: {
+                                                    p.teleport(spawns.SIX);
+                                                    break;
+                                                } case 7: {
+                                                    p.teleport(spawns.SEVEN);
+                                                    break;
+                                                } case 8: {
+                                                    p.teleport(spawns.EIGHT);
+                                                    break;
+                                                } case 9: {
+                                                    p.teleport(spawns.NINE);
+                                                    break;
+                                                } case 10: {
+                                                    p.teleport(spawns.TEN);
+                                                    break;
                                                 }
                                             }
+                                            i++;
                                         }
                                     }
                                 } else {
-                                    for (Player p : getPlayers()) p.sendMessage(getPrefix(false) + "§c§lThe game has been cancelled.\n§cNot enough players.");
+                                    for (Player p : getPlayers()) p.sendMessage(getPrefix(false) + "§c§lThe game has been cancelled:\n§cNot enough players.");
                                     Bukkit.getScheduler().cancelTasks(plugin);
                                 }
                             }, 0L, 20L);
@@ -241,7 +256,7 @@ public class spleefListener implements Listener {
             }
         } else {
             //Der Teleport Handler soll den teleportierten Spieler nicht handlen.
-            tplDontHandle = null;
+            tplDontHandle.remove(event.getPlayer().getUniqueId());
         }
     }
 
