@@ -84,6 +84,8 @@ public class spleefListener implements Listener {
             }
         } else if(invincibles.contains(event.getEntity().getUniqueId())) {
             event.setCancelled(true);
+        } else if(playerList.containsKey(event.getEntity().getUniqueId()) && !isGameRunning && event.getEntity().getWorld().getName().equals(worldName)) {
+            event.setCancelled(true);
         }
     }
 
